@@ -86,7 +86,7 @@ class InstagramLogger < Slogger
       puts "\nSlogger will now open an authorization page in your default web browser. Copy the code you receive and return here.\n\n"
       puts "Press Enter to continue..."
       keypress = gets
-      command = "/usr/bin/ruby test.rb"
+      command = "/usr/bin/ruby lib/instagram_server.rb"
       output = `#{command}`
       puts "\n\n\n------------- Authentication Started -------------\n\n"
       print "Paste the code you received here: "
