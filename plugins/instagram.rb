@@ -36,31 +36,6 @@ end
 
 require 'instagram'
 require 'rubygems'
-require "sinatra/base"
-
-class Example < Sinatra::Base
-    CALLBACK_URL = "http://localhost:4567/oauth/callback"
-    enable :sessions
-    Instagram.configure do |config|
-      config.client_id = '3b878d6b67444f3c8bac914655bfe582'
-      config.client_secret = '9cd3c532cd6a495890b2d2850647c8d1'
-    end
-
-    get "/" do
-      '<a href="/oauth/connect">Connect with Instagram</a>'
-    end
-
-    get "/oauth/connect" do
-      redirect Instagram.authorize_url(:redirect_uri => CALLBACK_URL)
-    end
-
-    get "/oauth/callback" do
-      response = Instagram.get_access_token(params[:code], :redirect_uri => CALLBACK_URL)
-      @instagram_config['access_token']= response.access_token
-      log.info("Instagram successfully configured, run Slogger again to continue")
-      return @instagram_config
-    end
-end
 
 # unique class name: leave '< Slogger' but change InstagramLogger (e.g. LastFMLogger)
 class InstagramLogger < Slogger
@@ -70,7 +45,6 @@ class InstagramLogger < Slogger
       @instagram_config = @config[self.class.name]
       # check for a required key to determine whether setup has been completed or not
       if !@instagram_config.key?('InstagramLogger_last_run') || @instagram_config['InstagramLogger_last_run'] == ""
-        puts !config.key?('InstagramLogger_last_run')
         @log.warn("<Service> has not been configured or an option is invalid, please edit your slogger_config file.")
         return
       end
@@ -110,7 +84,6 @@ class InstagramLogger < Slogger
 
     client = Instagram.client(:access_token => @instagram_config['access_token'])
     user = client.user
-    puts user
     instagram_media = client.user_recent_media
     begin
       instagram_media.each do |media|
@@ -120,7 +93,7 @@ class InstagramLogger < Slogger
         end
         image_url = media['images']['standard_resolution']['url']
         location_data = media['location'] unless media['location'] == nil
-        likes_data = media['likes'] unless media['likes']['count'] == 0
+        likes_data = client.media_likes(media['id']) unless media['likes']['count'] == 0
         caption = media['caption']['text'] unless media['caption'] == nil
         
         comments = ""
@@ -131,7 +104,8 @@ class InstagramLogger < Slogger
           end
         end
         
-        like_names = media['likes']['data'].map{|n| n['full_name']}
+        like_names = likes_data.map{|n| n['full_name'] == "" ? n['username'] : n['full_name']}
+        puts like_names
 
         likes = ""
         if media['likes']['count'] != 0
@@ -163,7 +137,6 @@ class InstagramLogger < Slogger
         sl.save_image(image_url, options['uuid'])
       end
     end
-    puts @instagram_config['backdate']
     @instagram_config['backdate'] = false
     return @instagram_config
 
