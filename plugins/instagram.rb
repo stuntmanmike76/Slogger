@@ -105,7 +105,6 @@ class InstagramLogger < Slogger
         end
         
         like_names = likes_data.map{|n| n['full_name'] == "" ? n['username'] : n['full_name']}
-        puts like_names
 
         likes = ""
         if media['likes']['count'] != 0
