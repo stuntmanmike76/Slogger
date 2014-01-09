@@ -30,6 +30,8 @@ After the slogger_config has been updated and you run again, a local web server 
 
 At this point, you should be authenticated and ready to go
 
+----
+
 ## Options
 
 I haven't added many options yet, but plan to once everything is fully tested. Right now the only  option in your slogger_config file called `backdate` (defaulted to `false`). If set to `true`, Slogger will get the 20 most recent Instagram photos and log them in Day One. This is nice when first getting started if you want to add photos you've already taken. Once finished, it will automatically set itself back to false. 
