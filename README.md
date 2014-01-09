@@ -1,3 +1,44 @@
+# Slogger: Instagram version
+
+This is a slightly modified version of Slogger that takes advantage of the Instagram API. The Instagram plugin will add more than just the photos. With this plugin, you will get:
+
+- Like count
+- Who liked your photo
+- Comments
+- Location, if included (also place name if you used Foursquare)
+
+## Installation
+
+Because I've made a few modifications to the core of Slogger, you can't simply install the plugin by itself. To get started, you'll need to update the gems required. If you've already used the Twitter logger, you'll just need to run the following:
+
+    bundle install
+
+If you aren't using the Twitter logger plugin, you'll need to install bundle first. This can be done by running the following two commands:
+
+    sudo gem install bundle
+    bundle install 
+
+For more information on this, see the official documentation for Slogger [here][officialslogger].
+
+[officialslogger]: https://github.com/ttscoff/Slogger
+
+Once the gems have been installed, you can follow the instructions given by running the plugin for the first time
+
+    ./slogger -o instagram
+
+After the slogger_config has been updated and you run again, a local web server will be created to authenticate your Instagram account. The page should automatically open and once you've approved the app, paste the code you're given into the terminal and hit enter. 
+
+At this point, you should be authenticated and ready to go
+
+## Options
+
+I haven't added many options yet, but plan to once everything is fully tested. Right now the only  option in your slogger_config file called `backdate` (defaulted to `false`). If set to `true`, Slogger will get the 20 most recent Instagram photos and log them in Day One. This is nice when first getting started if you want to add photos you've already taken. Once finished, it will automatically set itself back to false. 
+
+**Note**: if you ever set `backdate` back to `true`, you may end up with duplicate posts. 
+
+
+
+
 Support Slogger by contributing to my [GitTip fund](https://www.gittip.com/ttscoff/).
 
 
